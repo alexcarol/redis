@@ -169,6 +169,22 @@ void getsetCommand(redisClient *c) {
     server.dirty++;
 }
 
+void getdelCommand(redisClient *c) {
+    getGenericCommand(c);
+
+    int deleted = 0, j;
+
+    for (j = 1; j < c->argc; j++) {
+        expireIfNeeded(c->db,c->argv[j]);
+        if (dbDelete(c->db,c->argv[j])) {
+            signalModifiedKey(c->db,c->argv[j]);
+            notifyKeyspaceEvent(REDIS_NOTIFY_GENERIC, "getdel",c->argv[j],c->db->id);
+            server.dirty++;
+            deleted++;
+        }
+    }
+}
+
 void setrangeCommand(redisClient *c) {
     robj *o;
     long offset;

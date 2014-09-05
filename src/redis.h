@@ -1356,6 +1356,7 @@ void setnxCommand(redisClient *c);
 void setexCommand(redisClient *c);
 void psetexCommand(redisClient *c);
 void getCommand(redisClient *c);
+void getdelCommand(redisClient *c);
 void delCommand(redisClient *c);
 void existsCommand(redisClient *c);
 void setbitCommand(redisClient *c);
